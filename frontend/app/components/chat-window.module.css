@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  justify-content: space-between; /* This will help push the chatBox to the bottom */
+  position: relative; /* Ensures it is positioned relative to its normal position */
+  width: 100%;
+  background-color: #141828;
+  height: 100%;
+}
+
+.chatHeader {
+  background-color: #424242; /* Blue */
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.messageContainer {
+  flex: 1;
+  overflow-y: auto; /* Allows scroll for overflowing content */
+  padding-bottom: 5vh;
+}
+
+.chatLog {
+  padding: 20px;
+  text-align: left;
+  display: flex;
+}
+
+.chatBox {
+  border: 1px solid gray;
+  border-radius: 10px;
+  box-sizing: border-box;
+  bottom: 10px;
+  width: 90%;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  margin-left: 2vw;
+}
+
+.inputForm {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.chatInputTextarea {
+  font-size: 1.5em;
+  border: 0px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  outline: none;
+  background-color: transparent;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  resize: none; /* Prevent user resizing */
+  overflow: hidden;
+  margin-right: 1vw;
+  color: white;
+}
+
+.sendButton {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #3d3d3d; /* Blue */
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 1vh;
+  font-size: 1.5em;
+}

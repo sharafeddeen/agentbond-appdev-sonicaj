@@ -1,0 +1,19 @@
+.sidebar {
+    width: 250px;
+    background-color: #202123; /* Light gray */
+    padding: 20px;
+    overflow-y: auto; /* Enable scrolling for sidebar content */
+  }
+  
+  .newChatButton {
+    margin: 35px;
+    padding: 15px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.newChatButton:hover {
+    color: black;
+    background-color: rgb(197, 197, 197);
+    cursor: pointer;
+}

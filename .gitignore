@@ -1,0 +1,20 @@
+# Logs
+**/logs
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/firebase-debug.log*
+**/firebase-debug.*.log*
+
+# Firebase cache
+**/.firebase/
+
+# Next
+**/.next
+
+# Node Modules
+**/node_modules
+
+# Misc
+**/.vscode

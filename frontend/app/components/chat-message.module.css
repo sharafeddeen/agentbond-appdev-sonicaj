@@ -1,0 +1,73 @@
+/* chat-message.module.css */
+
+.chatMessage {
+  padding: 15px;
+  display: flex;
+  padding-left: 50px;
+  padding-right: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align messages to the left */
+}
+
+.message {
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+  width: fit-content; /* Adjust width dynamically based on content */
+  text-align: left;
+  white-space: pre-wrap;
+  display: flex;
+  flex-direction: column;
+}
+
+.currentUserMessageContainer {
+  display: flex;
+  flex-direction: column;
+  align-self: end;
+  align-items: flex-end;
+}
+
+.currentUserMessage {
+  margin-right: 3vw;
+  background-color: #d0d5dd;
+  align-self: end; /* Align user message to the right */
+  color: #1d2939;
+}
+
+.otherUserMessage {
+  margin-left: 3vw;
+  background-color: #e7c500;
+  align-self: flex-end; /* Align user message to the right */
+  color: #1d2939;
+}
+
+.botMessage {
+  margin-left: 3vw;
+  background-color: #19213D;
+  align-self: flex-start; /* Align bot message to the left */
+  color: white;
+}
+
+.currentUserAvatar {
+  font-size: 1.1em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  width: 7vw;
+  justify-content: end;
+  color: white
+}
+
+.avatarStyle {
+  font-size: 1.1em;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  width: 20vw;
+  color: white
+}
+
+.gap {
+  width: 1vw
+}

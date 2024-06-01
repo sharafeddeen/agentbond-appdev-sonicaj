@@ -1,0 +1,53 @@
+.container {
+    /* Frame 132 */
+
+    box-sizing: border-box;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+    gap: 32px;
+
+    width: 370px;
+    height: 100vh;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.07);
+
+    background: #19213D;
+
+    /* Inside auto layout */
+    flex: none;
+    align-self: stretch;
+    flex-grow: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    align-items: center;
+}
+
+/* Styles for scrollbar */
+.scrollbarCustom {
+    overflow-y: auto; /* Enable vertical scrollbar */
+    padding-right: 10px;
+    align-self: flex-start;
+}
+
+/* Styles for scrollbar */
+.scrollbarCustom::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+/* Track styles */
+.scrollbarCustom::-webkit-scrollbar-track {
+    margin-top: 70px;
+    background: transparent; /* Color of the scrollbar track */
+}
+
+/* Handle styles */
+.scrollbarCustom::-webkit-scrollbar-thumb {
+    background: #383e55; /* Color of the scrollbar handle */
+    border-radius: 10px; /* Border radius of the scrollbar handle */
+}
