@@ -16,13 +16,13 @@ const ChatWindow = ({ chat, onParticipantsUpdated }) => {
   const [unsubscribe, setUnsubscribe] = useState(null); // Keep track of the unsubscribe function for cleanup
   const [unsubscribeMessages, setUnsubscribeMessages] = useState(null); // Keep track of the unsubscribe function for cleanup
   const [unsubscribeParticipants, setUnsubscribeParticipants] = useState(null); // Keep track of the unsubscribe function for cleanup
-  
+    
 
 
 
 
   // Send the message and update the chat log when conversationId changes
-  useEffect(() => {
+  useEffect(() => {  
     async function sendInputAfterConversationCreated() {
       if (conversationId && finalInput.trim() !== '') {
         console.log('chat window -- (sendInputAfter...) new conversation created with ID: ', conversationId);
@@ -108,7 +108,7 @@ const ChatWindow = ({ chat, onParticipantsUpdated }) => {
 
   async function handleSubmit(message) {
     if (finalInput.trim() !== '') {
-      setSubmitted(true)
+      setSubmitted(true);
       console.log('chat window -- (handleSubmit) submitting with chatID: ', conversationId)
       if (!conversationId) {
         // If no conversation exists, create a new one
@@ -147,10 +147,11 @@ const ChatWindow = ({ chat, onParticipantsUpdated }) => {
   
   /************** User just sent a message, send to AI for a response ***************/
   const [submitted, setSubmitted] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     
-
+    setDisabled(chatLog[chatLog.length-1]?.role === 'user')
     async function fetchData(messages) {
       console.log('chat window -- (fetchData) messages are being sent to AI: ', messages)
       console.log ('chat window -- (fetchData) fetch started -- submitted: ', submitted)
@@ -179,6 +180,7 @@ const ChatWindow = ({ chat, onParticipantsUpdated }) => {
                   instanceID
               })
           });
+          setDisabled(false)
           if (!response.ok) {
             const errorResponse = await response.json(); // Properly await the JSON response
             throw new Error(`Network response was not ok. Error: ${JSON.stringify(errorResponse, null, 2)}`);
@@ -361,10 +363,11 @@ const textareaRef = useRef(null); // Create a ref for the textarea
       <div className={styles.messageContainer} ref={messageContainerRef}>
         {chatLog.map((message, index) => (
           <ChatMessage 
-          key={index} 
-          message={message} 
-          currentUser={message.sender? /**check if it's an old (with sender) or new (no sender) message */ 
-                                      message.sender === getAuth().currentUser.email : true} 
+            key={index} 
+            message={message} 
+            currentUser={message.sender? /**check if it's an old (with sender) or new (no sender) message */ 
+                                        message.sender === getAuth().currentUser.email : true} 
+            isLastMessage={index === chatLog.length - 1}
           />
         ))}
       </div>
@@ -379,20 +382,30 @@ const textareaRef = useRef(null); // Create a ref for the textarea
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
                 // Check if the enter key is pressed without the shift key being held down
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault(); // Prevent default to avoid adding a new line
-                  setFinalInput(e.target.value); // Trigger the handleSubmit function
+                if (e.key === 'Enter' &&
+                    !e.shiftKey &&
+                    !disabled
+                ) {
+                    e.preventDefault(); // Prevent default to avoid adding a new line
+                    setFinalInput(e.target.value); // Trigger the handleSubmit function
+                    setDisabled(true);
                 }
               }}
               className={styles.chatInputTextarea} 
               rows='1' 
-              placeholder='Your prompt here...'></textarea>
+              placeholder='Your prompt here...'
+            ></textarea>
               <button 
                 onClick={(e)=>{
-                  e.preventDefault(); 
+                  e.preventDefault();
                   setFinalInput(input)
+                  setDisabled(true);
                 }} 
-                className={styles.sendButton}
+                className={`${styles.sendButton} ${
+                  disabled &&
+                  styles.cursorPointer
+                }`}
+                disabled={disabled}
               >Send</button>
           </form>
         </div>

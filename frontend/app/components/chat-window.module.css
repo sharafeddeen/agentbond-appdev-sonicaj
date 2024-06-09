@@ -70,3 +70,8 @@
   margin-bottom: 1vh;
   font-size: 1.5em;
 }
+
+.cursorPointer {
+  cursor: default;
+  background-color: #5e5e5e;
+}
