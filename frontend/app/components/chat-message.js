@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styles from "./chat-message.module.css";
-import { Avatar } from '@mui/material';
+import { Avatar, Skeleton } from '@mui/material';
 import { getAuth } from 'firebase/auth';
 
 
-const ChatMessage = ({ message, currentUser }) => {
-
+const ChatMessage = ({ message, currentUser, isLastMessage }) => {
+  
   const [userName, setUserName] = useState({displayName: ''});
   
   //console.log('chat-message -- message: ', message);
@@ -118,62 +118,95 @@ const ChatMessage = ({ message, currentUser }) => {
         </div>
       </div>
       }
-      {message.role == 'assistant' &&
-      <div>
-        <div className={`${styles.avatarStyle}`}>
-          <Avatar src='/images/bond.png' />
-          <div className={styles.gap}></div>
-          <p>Bond</p>
-        </div>
-        {/*console.log('chat message -- content: ', message.content.split('\n\n').filter(m => m !== undefined))*/}
-        {message.content.split('\n\n').filter(m => m !== undefined).map((msg, index) => (
-          <div className={`${styles.message} ${styles.botMessage}`}>
-            <div className={styles.message} key={index}>
-              {msg?.includes('https') ?
-              <div>
-                {msg.substring(0, msg.indexOf('https'))}
-                <a 
-                  href={msg.substring(msg.indexOf('https'), msg.length)}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{ color: 'yellow', textDecoration: 'underline' }}
-                >
-                    {msg.substring(msg.indexOf('https'), msg.length)}
-                </a> 
-              </div> 
-              : 
-              msg
-              }
-            </div>
-          </div>
-        ))}
-        {false && showReview &&
+      {message.role == 'assistant' ?
         <div>
-          <div className={`${styles.message} ${messageStyle}`}>
-            <div className={styles.message}>
-              {review1}
+          <div className={`${styles.avatarStyle}`}>
+            <Avatar src='/images/bond.png' />
+            <div className={styles.gap}></div>
+            <p>Bond</p>
+          </div>
+          {/*console.log('chat message -- content: ', message.content.split('\n\n').filter(m => m !== undefined))*/}
+          {message.content.split('\n\n').filter(m => m !== undefined).map((msg, index) => (
+            <div className={`${styles.message} ${styles.botMessage}`}>
+              <div className={styles.message} key={index}>
+                {msg?.includes('https') ?
+                <div>
+                  {msg.substring(0, msg.indexOf('https'))}
+                  <a 
+                    href={msg.substring(msg.indexOf('https'), msg.length)}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ color: 'yellow', textDecoration: 'underline' }}
+                  >
+                      {msg.substring(msg.indexOf('https'), msg.length)}
+                  </a> 
+                </div> 
+                : 
+                msg
+                }
+              </div>
+            </div>
+          ))}
+          {false && showReview &&
+          <div>
+            <div className={`${styles.message} ${messageStyle}`}>
+              <div className={styles.message}>
+                {review1}
+              </div>
+            </div>
+            <div className={`${styles.message} ${messageStyle}`}>
+              <div className={styles.message}>
+                {review2}
+              </div>
+            </div>
+            <div className={`${styles.message} ${messageStyle}`}>
+              <div className={styles.message}>
+                {review3}
+              </div>
             </div>
           </div>
-          <div className={`${styles.message} ${messageStyle}`}>
-            <div className={styles.message}>
-              {review2}
+          }
+          {false && showDashboard &&
+            <div className={`${styles.message} ${messageStyle}`}>
+              <div className={styles.message}>
+                {setup_completed}
+              </div>
             </div>
-          </div>
-          <div className={`${styles.message} ${messageStyle}`}>
-            <div className={styles.message}>
-              {review3}
-            </div>
-          </div>
+          }
         </div>
-        }
-        {false && showDashboard &&
-          <div className={`${styles.message} ${messageStyle}`}>
-            <div className={styles.message}>
-              {setup_completed}
+        :
+        isLastMessage && (
+          <>
+            <div className={`${styles.avatarStyle}`}>
+              <Skeleton
+                variant="circular"
+                animation="wave"
+                width={40}
+                height={40}
+                style={{ backgroundColor: "#19213D" }}
+              />
+              <div className={styles.gap}></div>
+              <Skeleton
+                animation="wave"
+                height={30}
+                width="20%"
+                style={{
+                  marginBottom: 6,
+                  marginRight: 10,
+                  marginTop: 15,
+                  backgroundColor: "#19213D",
+                }}
+              />
             </div>
-          </div>
-        }
-      </div>
+            <Skeleton
+              variant="rounded"
+              animation="pulse"
+              width="30%"
+              height="40px"
+              style={{ backgroundColor: "#19213D", marginLeft: "3vw" }}
+            />
+          </>
+        )
       }
     </div>
   );
