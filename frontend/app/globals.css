@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
 
 :root {
   --max-width: 1100px;
@@ -40,6 +40,11 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+
+  --navi-blue: #0c1530;
+  --white: #ffffff;
+  --purple-blue: #5f5ff6;
+  --green: #2bc48a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -137,4 +142,76 @@ p {
 ::-webkit-scrollbar-thumb {
   background: #383e55;
   border-radius: 10px;
+}
+
+.body-text {
+  color: var(--white);
+  text-align: center;
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 180%;
+}
+
+.list-text {
+  color: var(--white);
+  text-align: start;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.outlineButton {
+  position: relative;
+  padding: 16px 34px !important;
+  margin: 5px;
+  display: inline-block;
+  color: var(--purple-blue);
+  font-weight: 600;
+}
+
+.outlineButton::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  padding: 3px;
+  background: linear-gradient(45deg, var(--purple-blue), var(--green));
+  -webkit-mask: linear-gradient(var(--purple-blue) 0 0) content-box,
+    linear-gradient(var(--purple-blue) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.outlineButton:focus,
+.outlineButton:hover {
+  border-radius: 5rem !important;
+}
+
+.outlineButton span {
+  border-radius: 5rem !important;
+}
+
+@media (max-width: 768px) {
+  .body-text {
+    font-size: 20px;
+  }
+  .container {
+    padding-left: 9px !important;
+    padding-right: 9px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .body-text {
+    font-size: 16px;
+  }
+
+  .list-text {
+    font-size: 16px;
+  }
 }

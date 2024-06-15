@@ -58,7 +58,7 @@ const RegisterPage = () => {
             .then(() => {
                 // setting timeout to test loading animation
                 setTimeout(() => {
-                    router.push('/home'); // Redirect on successful login
+                    router.push('/dashboard'); // Redirect on successful login
                 }, 0);
             })
         } catch (error) {
@@ -80,8 +80,8 @@ const RegisterPage = () => {
             const user = result.user;
             console.log('Logged in with Google -- user: ', user);
             
-            // Redirect to '/home' on successful login.
-            router.push('/home');
+            // Redirect to '/dashboard' on successful login.
+            router.push('/dashboard');
     
         } catch (error) {
             console.error('Error authenticating with Google: ', error.message);

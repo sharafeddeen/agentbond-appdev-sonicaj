@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+  height: 80vh;
+  margin-bottom: 4rem;
+}
+
+.navbarContainer {
+  grid-column: 1; /* First container */
+  height: 100%;
+}
+
+.sidebarContainer {
+  grid-column: 2; /* Second container */
+  height: 100%;
+}
+
+.chatwindowContainer {
+  grid-column: 3; /* Third container */
+  height: 100%;
+  overflow: auto;
+  border-radius: 10px;
+}

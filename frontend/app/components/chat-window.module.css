@@ -28,11 +28,11 @@
 }
 
 .chatBox {
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
   border-radius: 10px;
   box-sizing: border-box;
   bottom: 10px;
-  width: 90%;
+  width: 94%;
   margin-top: 2vh;
   margin-bottom: 2vh;
   margin-left: 2vw;
@@ -46,14 +46,13 @@
 
 .chatInputTextarea {
   font-size: 1.5em;
-  border: 0px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid gray;
+  border-radius: 10px;
   padding: 20px;
   outline: none;
   background-color: transparent;
   width: 100%;
   max-width: 100%;
-  min-width: 100%;
   resize: none; /* Prevent user resizing */
   overflow: hidden;
   margin-right: 1vw;
@@ -71,7 +70,61 @@
   font-size: 1.5em;
 }
 
+.button {
+  display: flex;
+  margin: auto !important;
+  padding: 10px 30px !important;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--white);
+  border-radius: 110px;
+  border: 2.4px solid var(--green);
+  background: linear-gradient(
+    102deg,
+    #5f5ff6 -16.04%,
+    #2c8cf4 54.3%,
+    #2bc48a 126.12%
+  );
+}
+
+.suggestions {
+  display: flex;
+  padding: 0 20px;
+  gap: 10px;
+  width: 100%;
+  
+  flex-wrap: nowrap; 
+  overflow: auto;
+}
+
+.suggestion {
+  border: 1px solid var(--white);
+  flex: 0 0 auto;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  min-width: 100px;
+  text-align: center;
+  color: var(--white);
+  white-space: nowrap; /* Prevent suggestion text from wrapping */
+}
+
+.suggestion:hover {
+  background-color: var(--white);
+  color: #141828;
+}
+
+
 .cursorPointer {
   cursor: default;
   background-color: #5e5e5e;
+}
+
+.suggestions::-webkit-scrollbar {
+  height: 10px !important;
 }

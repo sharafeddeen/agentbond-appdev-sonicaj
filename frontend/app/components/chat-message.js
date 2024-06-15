@@ -93,7 +93,7 @@ const ChatMessage = ({ message, currentUser, isLastMessage }) => {
           <div className={`${styles.currentUserAvatar}`}>
             <p>You</p>
             <div className={styles.gap}></div>
-            <Avatar src={getAuth().currentUser.photoURL} />
+            <Avatar src={getAuth().currentUser?.photoURL} />
           </div>
           <div className={`${styles.message} ${styles.currentUserMessage}`}>
             <div className={styles.message}>
