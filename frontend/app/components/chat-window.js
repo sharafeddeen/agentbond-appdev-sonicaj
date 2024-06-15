@@ -5,18 +5,26 @@ import ChatMessage from './chat-message';
 import styles from "./chat-window.module.css";
 import { sendMessage, createNewConversation, fetchConversations, onMessageAdded, onConversationParticipantsUpdated } from '../../handle-firestore';
 import { getAuth } from 'firebase/auth';
+import { Button, Modal, Fade, Box, Typography } from '@mui/material';
+import Backdrop from '@mui/material/Backdrop';
+import Link from 'next/link';
+import CloseIcon from '@mui/icons-material/Close';
 
-const ChatWindow = ({ chat, onParticipantsUpdated }) => {
+const ChatWindow = ({ chat, onParticipantsUpdated, publicBot }) => {
 
   const [input, setInput] = useState('');
-  const [chatLog, setChatLog] = useState([
-    //{role: 'assistant', content: 'Hi there!\n\nHow can I help you today?'},
-  ]);
+  const [chatLog, setChatLog] = useState([]);
+  const [landingPageChatLog, setLandingPageChatLog] = useState([]);
   const [conversationId, setConversationId] = useState(null); // State variable to hold conversation ID
   const [unsubscribe, setUnsubscribe] = useState(null); // Keep track of the unsubscribe function for cleanup
   const [unsubscribeMessages, setUnsubscribeMessages] = useState(null); // Keep track of the unsubscribe function for cleanup
   const [unsubscribeParticipants, setUnsubscribeParticipants] = useState(null); // Keep track of the unsubscribe function for cleanup
-    
+  const [open, setOpen] = useState(false);
+  const [disableSuggestion, setDisableSuggestion] = useState(true);
+  const [actionDisabled, setActionDisabled] = useState(false);
+
+  const loginSuggestion = "We’ve reached the conversation limit, please book time with Grayson and myself below in order to continue the conversation!";
+  
 
 
 
@@ -137,9 +145,53 @@ const ChatWindow = ({ chat, onParticipantsUpdated }) => {
     }
   }
 
+  const landingPageHandleSubmit = async (message) => {
+    setLandingPageChatLog(prevChatLog => [...prevChatLog, { role: "user", content: message }]);
+    setInput('');
+    setFinalInput('');
+    setDisabled(false)
+  };
+
+  useEffect(() => {
+    const callApi = async () => {
+      setActionDisabled(true);
+      try {
+        let response = await fetch(
+          `https://landingpage-ai-dot-agentbond-beta.uc.r.appspot.com/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ messages: landingPageChatLog }),
+          }
+        );
+
+        let resData = await response.json();
+        setLandingPageChatLog(prevChatLog => [...prevChatLog, resData]);
+        if(resData.content === loginSuggestion){
+          setOpen(true);
+        }
+        setActionDisabled(false);
+      } catch (error) {
+        console.log(`home (get_instance) -- Error occured!`, error);
+      }
+    };
+
+    if (landingPageChatLog.length > 0 && landingPageChatLog[landingPageChatLog.length - 1].role === "user") {
+      callApi();
+      setDisabled(false)
+    }
+  }, [landingPageChatLog]);
+
+
   useEffect(() => {
     if (finalInput && finalInput.trim() != '') {
-      handleSubmit(finalInput)
+      if(publicBot) {
+        landingPageHandleSubmit(finalInput);
+      } else {
+        handleSubmit(finalInput)
+      }
     }
   }, [finalInput])
 
@@ -355,20 +407,43 @@ const textareaRef = useRef(null); // Create a ref for the textarea
     console.log('chat window -- setting the instance: ')
   }, [chat])
 
+  let suggestions = [
+    "What is the difference between HubSpot Native and Custom Attribution?",
+    "What are some of the problems custom attribution solves?",
+    "What is the purpose of setting up custom attribution / what business outcomes can I receive?",
+    "How long will it take?",
+    "What exactly are you doing?",
+    "Who all needs to be involved?",
+    "Who is SonaMation? / What is SonaMation? Who created this?",
+    "What is AgentBond?"
+  ];
+  suggestions = suggestions.sort((a, b) => a.length - b.length);
 
+  const messagesToRender = landingPageChatLog.length > 0 ? landingPageChatLog : chatLog;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); 
 
   return (
     <div className={styles.container}>
       {/*console.log('chat window -- new instance: ', instanceID)*/}
       <div className={styles.messageContainer} ref={messageContainerRef}>
-        {chatLog.map((message, index) => (
-          <ChatMessage 
-            key={index} 
-            message={message} 
-            currentUser={message.sender? /**check if it's an old (with sender) or new (no sender) message */ 
-                                        message.sender === getAuth().currentUser.email : true} 
-            isLastMessage={index === chatLog.length - 1}
+        {messagesToRender.map((message, index) => (
+          <ChatMessage
+            key={index}
+            message={message}
+            currentUser={message.sender ? message.sender === getAuth().currentUser.email : true}
+            isLastMessage={index === messagesToRender.length - 1}
           />
+        ))}
+      </div>
+
+      <div className={styles.suggestions}>
+        {suggestions.map((suggestion, index) => (
+          <div key={index} className={styles.suggestion} onClick={() => {!actionDisabled && setFinalInput(suggestion), setDisableSuggestion(false)}}>
+            {suggestion}
+          </div>
         ))}
       </div>
       
@@ -384,7 +459,7 @@ const textareaRef = useRef(null); // Create a ref for the textarea
                 // Check if the enter key is pressed without the shift key being held down
                 if (e.key === 'Enter' &&
                     !e.shiftKey &&
-                    !disabled
+                    !disabled || (publicBot && disableSuggestion)
                 ) {
                     e.preventDefault(); // Prevent default to avoid adding a new line
                     setFinalInput(e.target.value); // Trigger the handleSubmit function
@@ -393,7 +468,8 @@ const textareaRef = useRef(null); // Create a ref for the textarea
               }}
               className={styles.chatInputTextarea} 
               rows='1' 
-              placeholder='Your prompt here...'
+              placeholder={publicBot && disableSuggestion ? 'Try any question from above to unlock prompt...' : 'Your prompt here...'}
+              disabled={publicBot && disableSuggestion}
             ></textarea>
               <button 
                 onClick={(e)=>{
@@ -402,14 +478,59 @@ const textareaRef = useRef(null); // Create a ref for the textarea
                   setDisabled(true);
                 }} 
                 className={`${styles.sendButton} ${
-                  disabled &&
+                  (publicBot ? actionDisabled : disabled) && 
                   styles.cursorPointer
                 }`}
-                disabled={disabled}
+                disabled={publicBot ? actionDisabled : disabled}
               >Send</button>
           </form>
         </div>
       </section>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={() => setOpen(false)}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={{
+            position: 'absolute',
+            borderRadius: 4,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 600,
+            bgcolor: 'background.paper',
+            border: '2px solid black',
+            boxShadow: 24,
+            p: 4,
+          }}>
+            <Typography id="transition-modal-title" sx={{ color: "#5f5ff6", fontSize:"32px", fontWeight: "600", textAlign: "center" }}>
+              Login
+            </Typography>
+            <CloseIcon onClick={() => setOpen(false)} sx={{ position: "absolute", top: 15, right: 15, cursor: "pointer", color: "#5f5ff6" }}/>
+            <Typography id="transition-modal-description" sx={{ my: 4, color: "black" , fontSize: "24px", textAlign:"center" }}>
+              We’ve reached the conversation limit, please book time with Grayson or login to continue the conversation!
+            </Typography>
+            <Link href="/login">
+              <Button
+                variant="outlined"
+                size="lg"
+                className={styles.button}
+              >
+                Login
+              </Button>
+            </Link>
+          </Box>
+        </Fade>
+      </Modal>
     </div>
   );
 };

@@ -1,0 +1,63 @@
+.gradientBorder {
+  position: relative;
+  padding: 16px 34px;
+  margin: 5px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.gradientBorder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  padding: 3px;
+  background: linear-gradient(45deg, var(--purple-blue), var(--green));
+  -webkit-mask: linear-gradient(var(--purple-blue) 0 0) content-box,
+    linear-gradient(var(--purple-blue) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.image {
+  margin-top: -1.2rem;
+  width: 100%;
+  height: auto;
+}
+
+.headerText span {
+  position: relative;
+}
+
+.headerText span::after {
+  content: url("/images/yellow-underline.svg");
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  margin: auto;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: url("../../../public/images/gradients/attribution.svg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(21, 29, 51, 0.5), rgba(21, 30, 55, 0.5));
+  z-index: -1;
+}

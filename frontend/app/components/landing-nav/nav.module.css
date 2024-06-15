@@ -1,0 +1,19 @@
+.navContainer {
+  padding: 1.5rem !important;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(12, 21, 48, 0.7);
+  backdrop-filter: saturate(180%) blur(5px);
+}
+
+.navContainer img {
+  cursor: pointer;
+}
+
+.navContainer a {
+  color: var(--purple-blue);
+  font-weight: 600;
+  font-size: 18px;
+}

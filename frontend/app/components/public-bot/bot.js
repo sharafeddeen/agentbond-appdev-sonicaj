@@ -3,17 +3,16 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import "../firebase-init";
-import Navbar from "../components/navbar/navbar";
+import "../../firebase-init";
 
-import styles from "./page.module.css";
-import Sidebar from "../components/sidebar/sidebar";
-import ChatWindow from "../components/chat-window";
+import styles from "./bot.module.css";
+import ChatWindow from "../../components/chat-window";
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [botResponse, setBotResponse] = useState([]);
 
   useEffect(() => {
     //const app = initializeApp(firebaseConfig);
@@ -24,7 +23,7 @@ const Dashboard = () => {
         setUser(user);
       } else {
         // No user is signed in.
-        router.push("/login"); // Redirect to authentication page if not authenticated
+        // router.push("/login"); // Redirect to authentication page if not authenticated
       }
     });
 
@@ -95,24 +94,11 @@ const Dashboard = () => {
   return (
     <div>
       <div className={styles.container}>
-        {user && (
-          <>
-            <div className={styles.navbarContainer}>
-              <Navbar current={"chat"} instance={instance} />
-            </div>
-            <div className={styles.sidebarContainer}>
-              <Sidebar
-                onSelectChat={handleSelectChat}
-                participantsUpdated={participantsUpdated}
-                onFinishParticipantsUpdated={finishParitipantsUpdated}
-              />
-            </div>
-          </>
-        )}
-        <div className={styles.chatwindowContainer}>
+        <div className={`${styles.chatwindowContainer} ${styles.borderRadius}`}>
           <ChatWindow
             chat={chat}
             onParticipantsUpdated={handleParticipantsUpdated}
+            publicBot={true}
           />
         </div>
       </div>
@@ -120,12 +106,12 @@ const Dashboard = () => {
   );
 };
 
-function AgentDashBoard({ publicClass }) {
+function PublicDashBoard() {
   return (
     <Suspense>
-      <Dashboard publicClass={publicClass} />
+      <Dashboard />
     </Suspense>
   );
 }
 
-export default AgentDashBoard;
+export default PublicDashBoard;

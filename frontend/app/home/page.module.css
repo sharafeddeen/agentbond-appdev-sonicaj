@@ -1,7 +1,7 @@
 .container {
   display: grid;
   grid-template-columns: 90px 370px 1fr; /* Fixed width for the first two containers, 1fr for the third container */
-  width: 100vw; /* Ensure the container takes up the full width */
+  width: 100%; /* Ensure the container takes up the full width */
   height: 100vh;
 }
 
@@ -19,4 +19,14 @@
   grid-column: 3; /* Third container */
   height: 100%;
   overflow: auto;
+}
+
+.mt {
+  grid-template-columns: none !important;
+}
+
+.borderRadius {
+  border-radius: 10px;
+  height: 80vh;
+  width: 130vh;
 }
