@@ -7,7 +7,7 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
     // Allow read access to all files in the profile-pictures directory
-    match /profile-pictures/{email} {
+    match /** {
       allow read: if true;
       
       // Allow write access only if the file path contains the user's email address

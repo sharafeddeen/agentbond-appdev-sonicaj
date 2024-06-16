@@ -85,7 +85,7 @@ const HeaderSection = () => {
           }}
         >
           <Image
-            src="/images/SonaMation.png"
+            src="/images/SonaMation.svg"
             width={231}
             height={136}
             alt="SonaMation"
